@@ -1,0 +1,432 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    background: #1a1a2e;
+}
+
+/* Form Overlay */
+.form-overlay {
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        #ff006e,
+        #ff006e 20px,
+        #ffbe0b 20px,
+        #ffbe0b 40px
+    );
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: bgScroll 20s linear infinite;
+}
+@keyframes bgScroll {
+    0% { background-position: 0 0; }
+    100% { background-position: 100px 0; }
+}
+.form-container {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    border: 5px solid #000;
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+    overflow: hidden;
+}
+.form-container::before {
+    content: "POP!";
+    position: absolute;
+    font-size: 100px;
+    color: rgba(255,0,110,0.1);
+    font-weight: 900;
+    transform: rotate(-15deg);
+    top: 20px;
+    right: -10px;
+}
+h2 {
+    color: #ff006e;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-shadow: 3px 3px 0 #000;
+}
+input {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border: 3px solid #000;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    background: #f0f0f0;
+}
+button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    background: #3a86ff;
+    color: white;
+    border: 3px solid #000;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 5px 5px 0 #000;
+    transition: all 0.2s;
+}
+button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0 #000;
+}
+button:active {
+    transform: translate(0, 0);
+    box-shadow: 2px 2px 0 #000;
+}
+
+/* 3D Animation Stage */
+.stage {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(to bottom, #87CEEB 0%, #E0F7FA 100%);
+    display: none;
+    perspective: 1000px;
+    overflow: hidden;
+}
+.scene {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.floor {
+    position: absolute;
+    width: 200%;
+    height: 50%;
+    background: repeating-linear-gradient(
+        90deg,
+        #90EE90 0px,
+        #90EE90 100px,
+        #7dd87d 100px,
+        #7dd87d 200px
+    );
+    bottom: 0;
+    transform: rotateX(90deg) translateZ(-200px);
+}
+
+/* 3D Boy Character */
+.boy {
+    position: relative;
+    width: 200px;
+    height: 400px;
+    transform-style: preserve-3d;
+    transform: translateX(-200px) rotateY(30deg);
+    animation: boyEnter 1s ease-out forwards;
+}
+@keyframes boyEnter {
+    from { transform: translateX(-400px) rotateY(30deg); }
+    to { transform: translateX(0) rotateY(30deg); }
+}
+.head {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: #ffdbac;
+    border-radius: 50%;
+    top: 0;
+    left: 60px;
+    border: 3px solid #000;
+    box-shadow: inset -10px -10px 0 rgba(0,0,0,0.1);
+}
+.face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.eye {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #000;
+    border-radius: 50%;
+    top: 30px;
+    animation: blink 3s infinite;
+}
+.eye.left { left: 20px; }
+.eye.right { right: 20px; }
+@keyframes blink {
+    0%, 96%, 98% { transform: scaleY(1); }
+    97% { transform: scaleY(0.1); }
+}
+.smile {
+    position: absolute;
+    width: 30px;
+    height: 15px;
+    border-bottom: 4px solid #000;
+    border-radius: 0 0 30px 30px;
+    bottom: 25px;
+    left: 25px;
+}
+.torso {
+    position: absolute;
+    width: 100px;
+    height: 140px;
+    background: #ff006e;
+    top: 80px;
+    left: 50px;
+    border: 3px solid #000;
+    border-radius: 20px;
+    box-shadow: inset -10px -5px 0 rgba(0,0,0,0.2);
+}
+.arm {
+    position: absolute;
+    width: 30px;
+    height: 100px;
+    background: #ffdbac;
+    top: 90px;
+    border: 3px solid #000;
+    border-radius: 15px;
+    transform-origin: 50% 20px;
+}
+.arm.left {
+    left: 30px;
+    transform: rotateZ(20deg);
+    background: #e5c298;
+}
+.arm.right {
+    left: 140px;
+    transform: rotateZ(-20deg);
+    transform-origin: 50% 20px;
+}
+.arm.right.throwing {
+    animation: throwAction 2s ease-in-out forwards;
+}
+@keyframes throwAction {
+    0% { transform: rotateZ(-20deg) rotateX(0); }
+    40% { transform: rotateZ(-60deg) rotateX(-30deg); }
+    100% { transform: rotateZ(-140deg) rotateX(-45deg); }
+}
+.leg {
+    position: absolute;
+    width: 35px;
+    height: 120px;
+    background: #3a86ff;
+    top: 210px;
+    border: 3px solid #000;
+    border-radius: 0 0 15px 15px;
+}
+.leg.left { left: 55px; }
+.leg.right { left: 110px; }
+
+/* Cake in Hand */
+.hand-cake {
+    position: absolute;
+    width: 50px;
+    height: 40px;
+    background: #8B4513;
+    bottom: -20px;
+    left: -10px;
+    border: 2px solid #000;
+    border-radius: 5px;
+    transform: translateZ(20px);
+}
+.hand-cake::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 5px;
+    width: 100%;
+    height: 15px;
+    background: #ff69b4;
+    border-radius: 50%;
+    border: 2px solid #000;
+}
+.candle {
+    position: absolute;
+    top: -35px;
+    width: 4px;
+    height: 20px;
+    background: #fff;
+    border: 1px solid #000;
+}
+.candle:nth-child(1) { left: 10px; }
+.candle:nth-child(2) { left: 23px; }
+.candle:nth-child(3) { left: 36px; }
+.flame {
+    position: absolute;
+    top: -45px;
+    font-size: 20px;
+    animation: flicker 0.5s infinite alternate;
+}
+.flame:nth-child(4) { left: 5px; }
+.flame:nth-child(5) { left: 18px; }
+.flame:nth-child(6) { left: 31px; }
+@keyframes flicker {
+    0% { transform: scale(1) rotate(-5deg); }
+    100% { transform: scale(1.2) rotate(5deg); }
+}
+
+/* Flying Cake */
+.flying-cake {
+    position: absolute;
+    width: 60px;
+    height: 50px;
+    left: 50%;
+    top: 50%;
+    margin-left: 180px;
+    margin-top: -100px;
+    display: none;
+    transform-style: preserve-3d;
+}
+.flying-cake.fly {
+    display: block;
+    animation: cakeFlight 2s ease-in forwards;
+}
+@keyframes cakeFlight {
+    0% {
+        transform: translateZ(0) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        transform: translateZ(300px) scale(3) rotate(360deg);
+    }
+    100% {
+        transform: translateZ(800px) scale(6) rotate(720deg);
+        opacity: 1;
+    }
+}
+
+/* Flash Effect */
+.flash {
+    position: fixed;
+    inset: 0;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 999;
+}
+.flash.active {
+    animation: flashAnim 0.5s ease-out forwards;
+}
+@keyframes flashAnim {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Birthday Page */
+.birthday-page {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, #fff5f5 0%, #ffcce6 100%);
+    display: none;
+    opacity: 0;
+    overflow-y: auto;
+    padding: 20px;
+    z-index: 100;
+}
+.birthday-page.show {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: pageEnter 1s ease-out forwards;
+}
+@keyframes pageEnter {
+    to { opacity: 1; }
+}
+.halftone {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, #000 2px, transparent 2px);
+    background-size: 20px 20px;
+    opacity: 0.1;
+    pointer-events: none;
+}
+.card {
+    background: white;
+    border: 5px solid #000;
+    border-radius: 30px;
+    padding: 40px;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 15px 15px 0 rgba(0,0,0,0.2);
+    position: relative;
+    transform: translateY(50px);
+    animation: cardSlide 0.8s ease-out 0.5s forwards;
+    opacity: 0;
+}
+@keyframes cardSlide {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+.card h1 {
+    font-size: clamp(2rem, 8vw, 4rem);
+    color: #ff006e;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-shadow: 4px 4px 0 #000;
+    line-height: 1.1;
+}
+.card .name {
+    color: #3a86ff;
+}
+.card .age-display {
+    font-size: 2rem;
+    background: #ffbe0b;
+    display: inline-block;
+    padding: 10px 30px;
+    border: 3px solid #000;
+    border-radius: 50px;
+    margin: 20px 0;
+    font-weight: bold;
+    box-shadow: 5px 5px 0 #000;
+}
+.message {
+    font-size: 1.3rem;
+    color: #333;
+    margin-top: 20px;
+    line-height: 1.6;
+}
+
+/* Settled Cake */
+.settled-cake {
+    position: absolute;
+    right: 40px;
+    bottom: 40px;
+    width: 100px;
+    height: 80px;
+    background: #8B4513;
+    border: 3px solid #000;
+    border-radius: 10px;
+    transform: translateX(200px) rotate(10deg);
+    animation: settleCake 1s ease-out 1s forwards;
+    opacity: 0;
+}
+@keyframes settleCake {
+    to {
+        transform: translateX(0) rotate(10deg);
+        opacity: 0.9;
+    }
+}
+.settled-cake::before {
+    content: '🎂';
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 60px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .boy { transform: scale(0.7) translateX(-50px) rotateY(30deg); }
+    .flying-cake { margin-left: 100px; }
+}
